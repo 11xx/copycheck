@@ -1,0 +1,70 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           copycheck
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/11xx/copycheck#readme>
+homepage:       https://github.com/11xx/copycheck#readme
+bug-reports:    https://github.com/11xx/copycheck/issues
+author:         Lucas (11xx)
+maintainer:     d@11xx.org
+copyright:      BSD3
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.org
+    CHANGELOG.org
+
+source-repository head
+  type: git
+  location: https://github.com/11xx/copycheck
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_copycheck
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , directory ==1.3.*
+    , filepath ==1.4.*
+    , optparse-applicative >=0.16 && <=1.17
+  default-language: Haskell2010
+
+executable copycheck-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_copycheck
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , copycheck
+    , directory ==1.3.*
+    , filepath ==1.4.*
+    , optparse-applicative >=0.16 && <=1.17
+  default-language: Haskell2010
+
+test-suite copycheck-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_copycheck
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , copycheck
+    , directory ==1.3.*
+    , filepath ==1.4.*
+    , optparse-applicative >=0.16 && <=1.17
+  default-language: Haskell2010
