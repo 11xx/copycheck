@@ -40,7 +40,7 @@ run opts@(Opts f t d p) n = do
           ct = copyText opts n'
 
   let renamedPath = getDir opts </> renamed n
-
+  putStrLn $ "Dir:" ++ getDir opts
   renamedE <- doesFileExist renamedPath
 
   recur <- if hasCopyText opts n && reb || renamedE
