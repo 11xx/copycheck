@@ -2,9 +2,12 @@ module Lib
     ( copyCheck
     ) where
 
+import Data.List (isInfixOf)
+-- import Data.List.Split (splitOn)
 import Options.Applicative
 import System.Directory
 import System.FilePath.Posix
+import Text.Regex.Posix
 
 copyCheck :: IO ()
 copyCheck = do
@@ -12,50 +15,41 @@ copyCheck = do
   f <- run opts 1
   putStrLn f
 
--- run :: (Show p, Num p) => Opts -> p -> IO [Char]
-run :: Opts -> Int -> IO String
-run opts@(Opts f t d p) n = do
+run opts@(Opts f t _ _) n = do
   let he = hasExt opts
       ih = isHidden opts
-      hc = hasCopyText opts n
+      hct = hasCopyText opts n
       dir = getDir opts
 
-  let isHiddenNoExt
-        | he && ih = False
-        | otherwise = True
-
-  let ren = replace fa ta tb
+  -- trace ("he" ++ heR)
+  let renamed nn
+        | he = heR
+        | ih = ihR
+        | otherwise = heR
         where
-          fa = takeFileName f
-          ta = copyText opts n
-          tb = copyText opts $ n + 1
+          ct = copyText opts nn
+          old = t ++ "[0-9]*"
+          heR = replace old "" (takeBaseName f) ++ ct ++ takeExtension f
+          ihR = replace old "" (takeFileName f) ++ ct
 
-  reb <- doesFileExist ren
+  -- debug putStrLn
+  -- putStrLn $ "cpyText: " ++ copyText opts n
+  -- putStrLn $ "replace: " ++ replace (t ++ "[0-9]*") "" (takeBaseName f)
+  -- putStrLn $ "renamedN: " ++ renamed n
+  let renamedPath = dir </> renamed n
+  -- putStrLn $ "renPath:" ++ renamedPath
 
-  let renamed n'
-        | he           = replace ct "" (takeBaseName f) ++ ct ++ takeExtension f
-        | ih && not he = replace ct "" (takeFileName f) ++ ct
-        | otherwise    = replace ct "" (takeBaseName f) ++ ct ++ takeExtension f
-        where
-          ct = copyText opts n'
+  -- let renamedPathInc = dir </> renamed (n + 1)
+  -- putStrLn $ "renPathInc:" ++ renamedPathInc
 
-  let renamedPath = getDir opts </> renamed n
-  putStrLn $ "Dir:" ++ getDir opts
-  renamedE <- doesFileExist renamedPath
+  re <- doesFileExist renamedPath
+  -- rei <- doesFileExist renamedPathInc
+  -- | re && rei = run opts (n + 3)
+  let run'
+        | re = run opts (n + 1)
+        | otherwise = pure $ renamed n
 
-  recur <- if hasCopyText opts n && reb || renamedE
-           then run opts (n + 1)
-           else pure ""
-
-  let doit
-        | n > 1000 = error "ERROR: Maximum recursion depth reached."
-        | hasCopyText opts n = if reb
-                               then recur
-                               else ren
-        | renamedE = recur
-        | otherwise = renamed n
-
-  pure doit
+  run'
 
 hasCopyText opts@(Opts f _ _ _) n
   | copyText opts n `isInfixOf` takeFileName f = True
@@ -70,8 +64,8 @@ hasExt (Opts f _ _ _)
   | hasExtension f = True
   | otherwise = False
 
-isHidden (Opts f _ _ _)
-  | head (takeFileName f) == '.' = True
+isHidden opts@(Opts f _ _ _)
+  | head (takeFileName f) == '.' && not (hasExt opts) = True
   | otherwise = False
 
 -- same as getPath but without filename
@@ -93,6 +87,13 @@ pad :: Show p => p -> Int -> [Char]
 pad n p = replicate (p - length sn) '0' <> sn
   where
     sn = show n
+
+-- replace' old new input =
+replace :: String -> String -> String -> String
+replace old new input =
+  case input =~ old :: (String, String, String) of
+    (before', _, after') -> before' ++ new ++ after'
+-- replace old new input = intercalate new (splitOn old input)
 
 data Opts = Opts
   { optFilename :: FilePath
