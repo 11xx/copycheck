@@ -42,14 +42,15 @@ run opts@(Opts f t _ _) n = do
   -- let renamedPathInc = dir </> renamed (n + 1)
   -- putStrLn $ "renPathInc:" ++ renamedPathInc
 
-  re <- doesFileExist renamedPath
-  -- rei <- doesFileExist renamedPathInc
-  -- | re && rei = run opts (n + 3)
-  let run'
-        | re = run opts (n + 1)
-        | otherwise = pure $ renamed n
-
-  run'
+  e <- doesFileExist f
+  -- helped by chatGPT
+  if e
+    then do re <- doesFileExist renamedPath
+            let run'
+                  | re = run opts (n + 1)
+                  | otherwise = pure $ renamed n
+            run'
+    else pure f
 
 hasCopyText opts@(Opts f _ _ _) n
   | copyText opts n `isInfixOf` takeFileName f = True
@@ -88,7 +89,6 @@ pad n p = replicate (p - length sn) '0' <> sn
   where
     sn = show n
 
--- replace' old new input =
 replace :: String -> String -> String -> String
 replace old new input =
   case input =~ old :: (String, String, String) of
