@@ -42,7 +42,7 @@ library:
   source-dirs: src
 
 executables:
-  copycheck-exe:
+  copycheck:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

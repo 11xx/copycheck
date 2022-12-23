@@ -39,7 +39,7 @@ library
     , regex-posix >=0.96 && <1.0
   default-language: Haskell2010
 
-executable copycheck-exe
+executable copycheck
   main-is: Main.hs
   other-modules:
       Paths_copycheck

@@ -93,7 +93,6 @@ replace :: String -> String -> String -> String
 replace old new input =
   case input =~ old :: (String, String, String) of
     (before', _, after') -> before' ++ new ++ after'
--- replace old new input = intercalate new (splitOn old input)
 
 data Opts = Opts
   { optFilename :: FilePath
