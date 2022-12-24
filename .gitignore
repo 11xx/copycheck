@@ -1,2 +1,4 @@
 .stack-work/
 *~
+.manual-test-cases/
+*.bkp
