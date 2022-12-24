@@ -3,25 +3,47 @@ module Lib
     ) where
 
 import Data.List (isInfixOf)
--- import Data.List.Split (splitOn)
 import Options.Applicative
-import System.Directory
+    ( execParser,
+      strArgument,
+      metavar,
+      help,
+      strOption,
+      long,
+      short,
+      value,
+      option,
+      auto,
+      info,
+      (<**>),
+      helper,
+      fullDesc,
+      progDesc,
+      header,
+      Parser,
+      ParserInfo )
+import System.Directory ( doesFileExist )
 import System.FilePath.Posix
-import Text.Regex.Posix
+    ( takeFileName,
+      takeBaseName,
+      takeExtension,
+      (</>),
+      hasExtension,
+      takeDirectory )
+import Text.Regex.Posix ( (=~) )
 
-copyCheck :: IO ()
-copyCheck = do
+copyCheck :: (Num p, Show p) => p -> IO ()
+copyCheck n = do
   opts <- execParser optsParserInfo
-  f <- run opts 1
-  putStrLn f
+  r <- copyCheckRename opts n
+  putStrLn r
 
-run opts@(Opts f t _ _) n = do
+copyCheckRename :: (Num p, Show p) => Opts -> p -> IO [Char]
+copyCheckRename opts@(Opts f t _ _) n = do
   let he = hasExt opts
       ih = isHidden opts
-      hct = hasCopyText opts n
       dir = getDir opts
 
-  -- trace ("he" ++ heR)
   let renamed nn
         | he = heR
         | ih = ihR
@@ -32,30 +54,28 @@ run opts@(Opts f t _ _) n = do
           heR = replace old "" (takeBaseName f) ++ ct ++ takeExtension f
           ihR = replace old "" (takeFileName f) ++ ct
 
-  -- debug putStrLn
-  -- putStrLn $ "cpyText: " ++ copyText opts n
-  -- putStrLn $ "replace: " ++ replace (t ++ "[0-9]*") "" (takeBaseName f)
-  -- putStrLn $ "renamedN: " ++ renamed n
   let renamedPath = dir </> renamed n
-  -- putStrLn $ "renPath:" ++ renamedPath
-
-  -- let renamedPathInc = dir </> renamed (n + 1)
-  -- putStrLn $ "renPathInc:" ++ renamedPathInc
 
   e <- doesFileExist f
-  -- helped by chatGPT
-  if e
-    then do re <- doesFileExist renamedPath
-            let run'
-                  | re = run opts (n + 1)
-                  | otherwise = pure $ renamed n
-            run'
-    else pure f
+  re <- doesFileExist renamedPath
 
+  let checkExist
+        | e = do
+            let checkReExist
+                  | re = copyCheckRename opts (n + 1)
+                  | otherwise = pure $ renamed n
+            checkReExist
+        | otherwise = pure f
+
+  checkExist
+
+-- unused
+hasCopyText :: Show p => Opts -> p -> Bool
 hasCopyText opts@(Opts f _ _ _) n
   | copyText opts n `isInfixOf` takeFileName f = True
   | otherwise = False
 
+copyText :: Show p => Opts -> p -> [Char]
 copyText (Opts _ t _ p) n = t ++ pad n p
 
 
@@ -65,30 +85,31 @@ hasExt (Opts f _ _ _)
   | hasExtension f = True
   | otherwise = False
 
+isHidden :: Opts -> Bool
 isHidden opts@(Opts f _ _ _)
   | head (takeFileName f) == '.' && not (hasExt opts) = True
   | otherwise = False
 
 -- same as getPath but without filename
+getDir :: Opts -> FilePath
 getDir (Opts f _ d _)
   | takeDirectory f == d = d
   | d == "." && takeDirectory f /= d = takeDirectory f
   | otherwise = d
 
+-- unused
 getPath :: Opts -> FilePath
 getPath (Opts f _ d _)
   | takeDirectory f == d = d </> takeFileName f
   | d == "." && takeDirectory f /= d = takeDirectory f </> takeFileName f
   | otherwise = d </> takeFileName f
 
--- rename (Opts f t d p) n
---   | t ++ pad n d `isInfixOf` takeFileName f =
-
 pad :: Show p => p -> Int -> [Char]
 pad n p = replicate (p - length sn) '0' <> sn
   where
     sn = show n
 
+-- snippet by chatGPT
 replace :: String -> String -> String -> String
 replace old new input =
   case input =~ old :: (String, String, String) of
