@@ -2,8 +2,8 @@ name:                copycheck
 version:             0.3.1.0
 github:              "11xx/copycheck"
 license:             BSD3
-author:              "Lucas (11xx)"
-maintainer:          "d@11xx.org"
+author:              "Lucas Gabriel"
+maintainer:          "g@11xx.org"
 copyright:           "BSD3"
 
 extra-source-files:

@@ -9,8 +9,8 @@ version:        0.3.1.0
 description:    Please see the README on Codeberg at <https://codeberg.org/11xx/copycheck>
 homepage:       https://github.com/11xx/copycheck#readme
 bug-reports:    https://github.com/11xx/copycheck/issues
-author:         Lucas (11xx)
-maintainer:     d@11xx.org
+author:         Lucas Gabriel
+maintainer:     g@11xx.org
 copyright:      BSD3
 license:        BSD3
 license-file:   LICENSE

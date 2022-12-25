@@ -33,7 +33,7 @@ To install =copycheck=, clone this repository and build the executable
 using the Haskell tool =stack=:
 
 #+begin_example
-  git clone https://github.com/<user>/copycheck
+  git clone https://codeberg.org/11xx/copycheck
   cd copycheck
   stack install
 #+end_example
