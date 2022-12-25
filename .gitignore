@@ -1,5 +1,6 @@
 .stack-work/
 *~
 .manual-test-cases/
+.bkp/
 *.bkp
 dist-newstyle/

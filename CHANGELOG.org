@@ -7,7 +7,15 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
-*** 0.3.1
+*** v0.3.2.0
+- GHC version bump
+- separated parsing of command-line options into a different module
+- created file Version.hs
+- addressed some comiple warnings
+- removed unnecessary argument checking for =optFilename=
+- added =-V=, =--version= flag
+
+*** v0.3.1
 - Changed internal module name from Stack's template to =CopyCheck=.
   Renamed =Lib.hs= to =CopyCheck.hs=
 - Handling of either option =-f, --file= or string positional argument,

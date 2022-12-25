@@ -1,6 +1,9 @@
 module Main (main) where
 
-import CopyCheck
+import CopyCheck.App (copyCheck)
+
+initialCounter :: Int
+initialCounter = 1
 
 main :: IO ()
-main = copyCheck 1
+main = copyCheck initialCounter

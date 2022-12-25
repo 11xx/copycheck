@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           copycheck
-version:        0.3.1.0
+version:        0.3.2.0
 description:    Please see the README on Codeberg at <https://codeberg.org/11xx/copycheck>
 homepage:       https://github.com/11xx/copycheck#readme
 bug-reports:    https://github.com/11xx/copycheck/issues
@@ -25,7 +25,9 @@ source-repository head
 
 library
   exposed-modules:
-      CopyCheck
+      CopyCheck.App
+      CopyCheck.OptParsing
+      CopyCheck.Version
   other-modules:
       Paths_copycheck
   hs-source-dirs:
@@ -35,7 +37,7 @@ library
       base >=4.7 && <5
     , directory ==1.3.*
     , filepath ==1.4.*
-    , optparse-applicative >=0.16 && <=1.17.1
+    , optparse-applicative >=0.17 && <1.17.1
     , regex-posix >=0.96 && <1.0
   default-language: Haskell2010
 
@@ -51,7 +53,7 @@ executable copycheck
     , copycheck
     , directory ==1.3.*
     , filepath ==1.4.*
-    , optparse-applicative >=0.16 && <=1.17.1
+    , optparse-applicative >=0.17 && <1.17.1
     , regex-posix >=0.96 && <1.0
   default-language: Haskell2010
 
@@ -68,6 +70,6 @@ test-suite copycheck-test
     , copycheck
     , directory ==1.3.*
     , filepath ==1.4.*
-    , optparse-applicative >=0.16 && <=1.17.1
+    , optparse-applicative >=0.17 && <1.17.1
     , regex-posix >=0.96 && <1.0
   default-language: Haskell2010

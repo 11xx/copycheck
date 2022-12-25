@@ -1,28 +1,9 @@
-module CopyCheck
+module CopyCheck.App
     ( copyCheck
     ) where
 
-import Options.Applicative
-    ( header,
-      progDesc,
-      fullDesc,
-      helper,
-      (<**>),
-      info,
-      auto,
-      option,
-      value,
-      short,
-      long,
-      strOption,
-      help,
-      metavar,
-      strArgument,
-      execParser,
-      Alternative((<|>)),
-      Parser,
-      ParserInfo )
-
+import CopyCheck.OptParsing
+       -- ( execParser, Opts(Opts), optsParserInfo )
 import System.Directory ( doesFileExist )
 import System.FilePath.Posix
     ( takeFileName,
@@ -35,16 +16,14 @@ import Text.Regex.Posix ( (=~) )
 
 copyCheck :: (Num p, Show p) => p -> IO ()
 copyCheck n = do
-  opts <- execParser optsParserInfo
+  opts <- customExecParser p optsParserInfo
   r <- copyCheckRename opts n
   putStrLn r
+    where
+      p = prefs showHelpOnEmpty
 
 copyCheckRename :: (Num p, Show p) => Opts -> p -> IO [Char]
-copyCheckRename opts@(Opts fo t d p) n = do
-  let f | not (null fo) = fo
-        | otherwise = error "ERROR: No filename provided."
-        -- #TODO better error handling
-
+copyCheckRename opts@(Opts f t d p _) n = do
   let he = hasExt f
       ih = isHidden f
       dir = getDir f d
@@ -103,61 +82,4 @@ replace :: String -> String -> String -> String
 replace old new input =
   case input =~ old :: (String, String, String) of
     (before', _, after') -> before' ++ new ++ after'
-
-data Opts = Opts
-  { optFilename :: FilePath
-  , optCopyText :: String
-  , optDir      :: FilePath
-  , optPadNum   :: Int
-  }
-
-optsParser :: Parser Opts
-optsParser
-  = Opts
-  <$> (fileParser <|> fileOptParser)
-  <*> copyTextParser
-  <*> dirParser
-  <*> padNumParser
-
-  where
-    fileParser
-      = strArgument
-      $ metavar "FILENAME"
-      <> help "Input file"
-
-    fileOptParser
-      = strOption
-      $ long "file"
-      <> short 'f'
-      <> metavar "FILENAME"
-
-    copyTextParser
-      = strOption
-      $ long "text"
-      <> short 't'
-      <> metavar "TEXT"
-      <> value "_COPY_"
-      <> help "Text to append to conflicting filename"
-
-    dirParser
-      = strOption
-      $ long "dir"
-      <> short 'd'
-      <> metavar "PATH"
-      <> value "."
-      <> help "Directory to check if FILENAME exists"
-
-    padNumParser
-      = option auto
-      $ long "padding"
-      <> short 'p'
-      <> metavar "NUM"
-      <> value 2
-      <> help "(TODO) number of zeros to add to the incremental number after TEXT"
-
-optsParserInfo :: ParserInfo Opts
-optsParserInfo = info (optsParser <**> helper)
-  $ fullDesc
-  <> progDesc "Check if input filename exists in a given direcory and return it's renamed string if necessary."
-  <> header "copycheck - Check if filename exists and return a renamed version if necessary."
 
