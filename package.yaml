@@ -1,5 +1,5 @@
 name:                copycheck
-version:             0.1.0.0
+version:             0.3.1.0
 github:              "11xx/copycheck"
 license:             BSD3
 author:              "Lucas (11xx)"
@@ -17,14 +17,13 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/11xx/copycheck#readme>
+description:         Please see the README on Codeberg at <https://codeberg.org/11xx/copycheck>
 
 dependencies:
 - base >= 4.7 && < 5
-- optparse-applicative >= 0.16 && <= 1.17
+- optparse-applicative >= 0.16 && <= 1.17.1
 - directory >= 1.3 && < 1.4
 - filepath >= 1.4 && < 1.5
-# - split >= 0.2 && < 0.3
 - regex-posix >= 0.96 && < 1.0
 
 ghc-options:

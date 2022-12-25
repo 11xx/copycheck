@@ -1,0 +1,16 @@
+* Changelog for =copycheck=
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]], and this project adheres to the
+[[https://pvp.haskell.org/][Haskell Package Versioning Policy]].
+
+** Unreleased
+
+*** 0.3.1
+- Changed internal module name from Stack's template to =CopyCheck=.
+  Renamed =Lib.hs= to =CopyCheck.hs=
+- Handling of either option =-f, --file= or string positional argument,
+  only one accepted
+- Fixed =-d= not working
+- version bump

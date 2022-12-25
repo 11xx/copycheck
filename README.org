@@ -8,11 +8,11 @@
   :PROPERTIES:
   :CUSTOM_ID: copycheck-a-command-line-tool-for-renaming-files-with-copy-identifiers
   :END:
-=copycheck= is a command-line tool that allows you to rename a file to
+=copycheck= is a command-line tool that allows the renaming a file to
 include a copy identifier if a file with the same name already exists in
-a specified directory. This can be useful if you want to keep multiple
-copies of a file in the same directory, but need to ensure that each
-copy has a unique name.
+a specified directory. This can be useful to keep multiple copies of a
+file in the same directory, but need to ensure that each copy has a
+unique name.
 
 ** Requirements
    :PROPERTIES:
@@ -39,7 +39,8 @@ using the Haskell tool =stack=:
 #+end_example
 
 This will build the executable and copy it to Stack's default
-=~/.local/bin=. You can add this directory to your =PATH= to make
+=~/.local/bin=, or the location specified by =local-bin-path: ...= in
+config Stack's =config.yaml=. This directory can be added to =PATH= to make
 the =copycheck= command available globally.
 
 ** Usage
@@ -47,7 +48,7 @@ the =copycheck= command available globally.
    :CUSTOM_ID: usage
    :END:
 To use =copycheck=, open a terminal and navigate to the directory
-containing the file you want to rename. Then, run the =copycheck=
+containing the file to be renamed. Then, run the =copycheck=
 command with the following options:
 
 #+begin_example
@@ -65,13 +66,13 @@ command with the following options:
    :PROPERTIES:
    :CUSTOM_ID: example
    :END:
-Here is an example of how you might use =copycheck= to rename a file:
+Here is an example of how =copycheck= might be used to rename a file:
 
 #+begin_example
-  copycheck --file "report.txt" --text "copy" --dir "documents" --padding 3
+  copycheck --file "report.txt" --text "_copy" --dir "documents" --padding 3
 #+end_example
 
-This will rename the file =report.txt= to =documents/reportcopy001.txt=
+This will rename the file =report.txt= to =documents/report_copy001.txt=
 if a file with that name already exists in the =documents= directory. If
 a file with that name does not exist, the original file will not be
 renamed.
@@ -91,6 +92,7 @@ renamed.
   name as the renamed file already exists, =copycheck= will increment
   the copy identifier and try again until a unique name is found.
 
-* TODOs                                                                :todo:
-[ ] replace for specified copy text with =-r <copytext-regexp>=
+# * TODOs                                                                :todo:
+# [ ] replace for specified copy text with =-r <copytext-regexp>=
 # [2022-12-22 Thu 22:34:01 -03]
+

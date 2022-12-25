@@ -1,27 +1,28 @@
-module Lib
+module CopyCheck
     ( copyCheck
     ) where
 
-import Data.List (isInfixOf)
 import Options.Applicative
-    ( execParser,
-      strArgument,
-      metavar,
-      help,
-      strOption,
-      long,
-      short,
-      value,
-      option,
-      auto,
-      info,
-      (<**>),
-      helper,
-      fullDesc,
+    ( header,
       progDesc,
-      header,
+      fullDesc,
+      helper,
+      (<**>),
+      info,
+      auto,
+      option,
+      value,
+      short,
+      long,
+      strOption,
+      help,
+      metavar,
+      strArgument,
+      execParser,
+      Alternative((<|>)),
       Parser,
       ParserInfo )
+
 import System.Directory ( doesFileExist )
 import System.FilePath.Posix
     ( takeFileName,
@@ -39,25 +40,27 @@ copyCheck n = do
   putStrLn r
 
 copyCheckRename :: (Num p, Show p) => Opts -> p -> IO [Char]
-copyCheckRename opts@(Opts f t _ _) n = do
-  let he = hasExt opts
-      ih = isHidden opts
-      dir = getDir opts
+copyCheckRename opts@(Opts fo t d p) n = do
+  let f | not (null fo) = fo
+        | otherwise = error "ERROR: No filename provided."
+        -- #TODO better error handling
+
+  let he = hasExt f
+      ih = isHidden f
+      dir = getDir f d
 
   let renamed nn
         | he = heR
         | ih = ihR
         | otherwise = heR
         where
-          ct = copyText opts nn
+          ct = copyText t p nn
           old = t ++ "[0-9]*"
           heR = replace old "" (takeBaseName f) ++ ct ++ takeExtension f
           ihR = replace old "" (takeFileName f) ++ ct
 
-  let renamedPath = dir </> renamed n
-
-  e <- doesFileExist f
-  re <- doesFileExist renamedPath
+  e <- doesFileExist $ dir </> f
+  re <- doesFileExist $ dir </> renamed n
 
   let checkExist
         | e = do
@@ -69,40 +72,26 @@ copyCheckRename opts@(Opts f t _ _) n = do
 
   checkExist
 
--- unused
-hasCopyText :: Show p => Opts -> p -> Bool
-hasCopyText opts@(Opts f _ _ _) n
-  | copyText opts n `isInfixOf` takeFileName f = True
-  | otherwise = False
-
-copyText :: Show p => Opts -> p -> [Char]
-copyText (Opts _ t _ p) n = t ++ pad n p
+copyText :: Show p => [Char] -> Int -> p -> [Char]
+copyText t p n = t ++ pad n p
 
 
-hasExt :: Opts -> Bool
-hasExt (Opts f _ _ _)
+hasExt :: FilePath -> Bool
+hasExt f
   | head (takeFileName f) == '.' && takeExtension f == takeFileName f = False
   | hasExtension f = True
   | otherwise = False
 
-isHidden :: Opts -> Bool
-isHidden opts@(Opts f _ _ _)
-  | head (takeFileName f) == '.' && not (hasExt opts) = True
+isHidden :: FilePath -> Bool
+isHidden f
+  | head (takeFileName f) == '.' && not (hasExt f) = True
   | otherwise = False
 
--- same as getPath but without filename
-getDir :: Opts -> FilePath
-getDir (Opts f _ d _)
+getDir :: FilePath -> FilePath -> FilePath
+getDir f d
   | takeDirectory f == d = d
-  | d == "." && takeDirectory f /= d = takeDirectory f
+  | d == "." = takeDirectory f
   | otherwise = d
-
--- unused
-getPath :: Opts -> FilePath
-getPath (Opts f _ d _)
-  | takeDirectory f == d = d </> takeFileName f
-  | d == "." && takeDirectory f /= d = takeDirectory f </> takeFileName f
-  | otherwise = d </> takeFileName f
 
 pad :: Show p => p -> Int -> [Char]
 pad n p = replicate (p - length sn) '0' <> sn
@@ -125,15 +114,22 @@ data Opts = Opts
 optsParser :: Parser Opts
 optsParser
   = Opts
-  <$> fileParser
+  <$> (fileParser <|> fileOptParser)
   <*> copyTextParser
   <*> dirParser
   <*> padNumParser
+
   where
     fileParser
       = strArgument
       $ metavar "FILENAME"
       <> help "Input file"
+
+    fileOptParser
+      = strOption
+      $ long "file"
+      <> short 'f'
+      <> metavar "FILENAME"
 
     copyTextParser
       = strOption

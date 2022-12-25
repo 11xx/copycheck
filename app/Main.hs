@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Lib
+import CopyCheck
 
 main :: IO ()
 main = copyCheck 1
