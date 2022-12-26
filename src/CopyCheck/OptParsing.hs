@@ -35,12 +35,14 @@ optsParser
       = strArgument
       $ metavar "FILENAME"
       <> help "Input file"
+      <> action "file"
 
     fileOptParser'
       = strOption
       $ long "file"
       <> short 'f'
       <> metavar "FILENAME"
+      <> action "file"
 
     copyTextOptParser
       = strOption
@@ -57,7 +59,9 @@ optsParser
       <> metavar "PATH"
       <> value "."
       <> help "Directory to check if FILENAME exists"
+      <> action "directory"
 
+    padNumOptParser :: Parser Int
     padNumOptParser
       = option auto
       $ long "padding"
@@ -65,6 +69,10 @@ optsParser
       <> metavar "NUM"
       <> value 2
       <> help "Number of zeros to add to the incremental number after TEXT"
+      <> completeWith (showNumList 1 6)
+
+showNumList :: Int -> Int -> [String]
+showNumList x y = map show [x..y]
 
 versionOptParse :: Parser (a -> a)
 versionOptParse =
@@ -76,5 +84,5 @@ versionOptParse =
 optsParserInfo :: ParserInfo Opts
 optsParserInfo = info (optsParser <**> helper)
   $ fullDesc
-  <> progDesc "Check if input filename exists in a given direcory and return it's renamed string if necessary."
+  <> progDesc "Check if input filename exists in a given directory and return it's renamed string if necessary."
   <> header "copycheck - Check if filename exists and return a renamed version if necessary."
