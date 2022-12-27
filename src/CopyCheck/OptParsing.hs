@@ -1,6 +1,5 @@
 module CopyCheck.OptParsing
   ( Opts(..)
-  , execParser
   , customExecParser
   , prefs
   , showHelpOnEmpty

@@ -12,7 +12,7 @@ import System.FilePath.Posix
       (</>),
       hasExtension,
       takeDirectory )
-import Text.Regex.Posix ( (=~) )
+import Text.Regex.TDFA ( (=~) )
 
 copyCheck :: (Num p, Show p) => p -> IO ()
 copyCheck n = do
@@ -38,18 +38,19 @@ copyCheckRename opts@(Opts f t d p _) n = do
           heR = replace old "" (takeBaseName f) ++ ct ++ takeExtension f
           ihR = replace old "" (takeFileName f) ++ ct
 
-  e <- doesFileExist $ dir </> f
+  e  <- doesFileExist $ dir </> f
   re <- doesFileExist $ dir </> renamed n
 
   let checkExist
-        | e = do
-            let checkReExist
-                  | re = copyCheckRename opts (n + 1)
-                  | otherwise = pure $ renamed n
-            checkReExist
+        | e = checkReExist
         | otherwise = pure f
+        where
+          checkReExist
+            | re = copyCheckRename opts (n + 1)
+            | otherwise = pure $ renamed n
 
   checkExist
+
 
 copyText :: Show p => [Char] -> Int -> p -> [Char]
 copyText t p n = t ++ pad n p
