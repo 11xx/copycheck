@@ -7,6 +7,11 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
+*** v0.3.2.2
+- Updated README: moved bullet-points & updated requirements list
+- fixed filename with directory not working as expected
+# [2022-12-28 Wed 03:32:38 -03]
+
 *** v0.3.2.1
 - Changed from package =regex-posix= to =regex-tdfa=
 - Small code changes
