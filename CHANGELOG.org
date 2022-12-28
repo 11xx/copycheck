@@ -7,6 +7,10 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
+*** v0.3.2.1
+- Changed from package =regex-posix= to =regex-tdfa=
+- Small code changes
+
 *** v0.3.2.0
 - GHC version bump
 - separated parsing of command-line options into a different module
