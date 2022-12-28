@@ -38,10 +38,11 @@ unique name.
    :CUSTOM_ID: requirements
    :END:
 This program requires the following Haskell libraries:
-
+- =Data.ByteString.UTF8=
+- =Data.ByteString.Char8=
 - =Options.Applicative=
-- =System.Directory=
-- =System.FilePath.Posix=
+- =RawFilePath=
+- =System.FilePath.Posix.ByteString=
 - =Text.Regex.TDFA=
 
 ** Installation
