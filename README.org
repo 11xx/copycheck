@@ -14,6 +14,25 @@ a specified directory. This can be useful to keep multiple copies of a
 file in the same directory, but need to ensure that each copy has a
 unique name.
 
+** Notes
+   :PROPERTIES:
+   :CUSTOM_ID: notes
+   :END:
+- This tool doesn't make filesystem changes, it only prints to the
+  terminal.
+- =copycheck= only works with files, not directories.
+- If the =--dir= option is not specified, =copycheck= will use the
+  current directory as the target directory.
+- If the =--padding= option is not specified, =copycheck= will use a
+  default value of 2 padding zeros for the copy identifier, e.g: "=01=".
+- If a file with the same name as the renamed file already exists,
+  =copycheck= will increment the copy identifier and try again until a
+  unique name is found.
+
+# * TODOs                                                                :todo:
+# [ ] replace for specified copy text with =-r <copytext-regexp>=
+# [2022-12-22 Thu 22:34:01 -03]
+
 ** Requirements
    :PROPERTIES:
    :CUSTOM_ID: requirements
@@ -23,7 +42,7 @@ This program requires the following Haskell libraries:
 - =Options.Applicative=
 - =System.Directory=
 - =System.FilePath.Posix=
-- =Text.Regex.Posix=
+- =Text.Regex.TDFA=
 
 ** Installation
    :PROPERTIES:
@@ -39,15 +58,15 @@ using the Haskell tool =stack=:
 #+end_example
 
 This will build the executable and copy it to Stack's default
-=~/.local/bin=, or the location specified by =local-bin-path: ...= in
-config Stack's =config.yaml=. This directory can be added to =PATH= to make
-the =copycheck= command available globally.
+=~/.local/bin=, or the location specified by =local-bin-path:= in Stack's
+=config.yaml=. This directory can be added to =PATH= to make the =copycheck=
+command available globally.
 
 ** Usage
    :PROPERTIES:
    :CUSTOM_ID: usage
    :END:
-To use =copycheck=, open a terminal and navigate to the directory
+To use =copycheck=, open a terminal and point it to the directory
 containing the file to be renamed. Then, run the =copycheck=
 command with the following options:
 
@@ -56,11 +75,12 @@ command with the following options:
 #+end_example
 
 - =--file=: the path to the file to be renamed (required)
-- =--text=: the string to be added to the file name to indicate it is a copy
-- =--dir=: the directory where the file is located (optional, default is
-  the current directory)
+- =--text=: the string to be added to the file name to indicate it is a
+  copy (optional, defaults to =_COPY_=)
+- =--dir=: the directory where the file is located (optional, defaults
+  to the current directory)
 - =--padding=: the number of padding zeros to be added to the copy
-  identifier (optional, default is 2)
+  identifier (optional, default is =2=, producing a number such as "02")
 
 ** Example
    :PROPERTIES:
@@ -76,23 +96,4 @@ This will rename the file =report.txt= to =documents/report_copy001.txt=
 if a file with that name already exists in the =documents= directory. If
 a file with that name does not exist, the original file will not be
 renamed.
-
-** Notes
-   :PROPERTIES:
-   :CUSTOM_ID: notes
-   :END:
-- This tool doesn't make filesystem changes, it only prints to the
-  terminal.
-- =copycheck= only works with files, not directories.
-- If the =--dir= option is not specified, =copycheck= will use the
-  current directory as the target directory.
-- If the =--padding= option is not specified, =copycheck= will use a
-  default value of 2 padding zeros for the copy identifier. .e.g: "=01=".
-- =copycheck= will not overwrite existing files. If a file with the same
-  name as the renamed file already exists, =copycheck= will increment
-  the copy identifier and try again until a unique name is found.
-
-# * TODOs                                                                :todo:
-# [ ] replace for specified copy text with =-r <copytext-regexp>=
-# [2022-12-22 Thu 22:34:01 -03]
 

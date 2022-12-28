@@ -7,6 +7,12 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
+*** v0.3.3.1
+- Moved to Data.ByteString.Char8 & lastly encoded with Data.ByteString.UTF8
+  Yes, for an application this small there was /no/ difference in performance.
+- Small code changes
+  # [2022-12-28 Wed 12:57:22 -03]
+
 *** v0.3.2.1
 - Changed from package =regex-posix= to =regex-tdfa=
 - Small code changes

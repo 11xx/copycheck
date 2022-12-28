@@ -7,15 +7,20 @@ module CopyCheck.OptParsing
   , optsParserInfo
   ) where
 
+import qualified Data.ByteString.Char8 as C
+
 import Options.Applicative
 import CopyCheck.Version (versionStr)
 
 import Data.Kind (Type) -- for Opts data record `* -> *'
 
+import System.FilePath.Posix.ByteString
+    ( encodeFilePath, RawFilePath )
+
 data Opts = Opts
-  { optFilename :: FilePath
-  , optCopyText :: String
-  , optDir      :: FilePath
+  { optFilename :: RawFilePath
+  , optCopyText :: C.ByteString
+  , optDir      :: RawFilePath
   , optPadNum   :: Int
   , optVersion  :: Type -> Type
   }
@@ -48,7 +53,7 @@ optsParser
       $ long "text"
       <> short 't'
       <> metavar "TEXT"
-      <> value "_COPY_"
+      <> value (C.pack "_COPY_")
       <> help "Text to append to conflicting filename"
 
     dirOptParser
@@ -56,11 +61,10 @@ optsParser
       $ long "dir"
       <> short 'd'
       <> metavar "PATH"
-      <> value "."
+      <> value (encodeFilePath ".")
       <> help "Directory to check if FILENAME exists"
       <> action "directory"
 
-    padNumOptParser :: Parser Int
     padNumOptParser
       = option auto
       $ long "padding"
@@ -68,9 +72,9 @@ optsParser
       <> metavar "NUM"
       <> value 2
       <> help "Number of zeros to add to the incremental number after TEXT"
-      <> completeWith (showNumList 1 6)
+      <> completeWith (showNumList 1 (6 :: Int))
 
-showNumList :: Int -> Int -> [String]
+showNumList :: (Show a, Enum a) => a -> a -> [String]
 showNumList x y = map show [x..y]
 
 versionOptParse :: Parser (a -> a)

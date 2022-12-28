@@ -3,30 +3,44 @@ module CopyCheck.App
     ) where
 
 import CopyCheck.OptParsing
-       -- ( execParser, Opts(Opts), optsParserInfo )
-import System.Directory ( doesFileExist )
-import System.FilePath.Posix
-    ( takeFileName,
-      takeBaseName,
-      takeExtension,
-      (</>),
+    ( optsParserInfo,
+      showHelpOnEmpty,
+      prefs,
+      customExecParser,
+      Opts(Opts) )
+
+import RawFilePath ( RawFilePath, doesFileExist )
+
+import System.FilePath.Posix.ByteString
+    ( (</>),
       hasExtension,
-      takeDirectory )
+      takeBaseName,
+      takeDirectory,
+      takeExtension,
+      takeFileName )
+
 import Text.Regex.TDFA ( (=~) )
+
+import qualified Data.ByteString.UTF8 as BB (fromString)
+import qualified Data.ByteString.Char8 as C
 
 copyCheck :: (Num p, Show p) => p -> IO ()
 copyCheck n = do
   opts <- customExecParser p optsParserInfo
   r <- copyCheckRename opts n
-  putStrLn r
+  C.putStrLn $ BB.fromString (C.unpack r) -- from D.BS.Char8 to D.BS.UTF8
     where
       p = prefs showHelpOnEmpty
 
-copyCheckRename :: (Num p, Show p) => Opts -> p -> IO [Char]
-copyCheckRename opts@(Opts f t d p _) n = do
+copyCheckRename :: (Num p, Show p) => Opts -> p -> IO C.ByteString
+copyCheckRename opts@(Opts fo t d p _) n = do
+  let f = takeFileName fo
   let he = hasExt f
       ih = isHidden f
-      dir = getDir f d
+      dir = getDir fo d
+      base = takeBaseName f
+      file = takeFileName f
+      ext = takeExtension f
 
   let renamed nn
         | he = heR
@@ -34,11 +48,14 @@ copyCheckRename opts@(Opts f t d p _) n = do
         | otherwise = heR
         where
           ct = copyText t p nn
-          old = t ++ "[0-9]*"
-          heR = replace old "" (takeBaseName f) ++ ct ++ takeExtension f
-          ihR = replace old "" (takeFileName f) ++ ct
+          heR = replacedHeR
+          ihR = replacedIhR
+          replacedHeR = replace old new base <> ct <> ext
+          replacedIhR = replace old new file <> ct
+          old = t <> C.pack "[0-9]*"
+          new = C.empty
 
-  e  <- doesFileExist $ dir </> f
+  e <- doesFileExist $  dir </> f
   re <- doesFileExist $ dir </> renamed n
 
   let checkExist
@@ -51,36 +68,45 @@ copyCheckRename opts@(Opts f t d p _) n = do
 
   checkExist
 
+copyText :: Show p => C.ByteString -> Int -> p -> C.ByteString
+copyText t p n = t <> pad n p
 
-copyText :: Show p => [Char] -> Int -> p -> [Char]
-copyText t p n = t ++ pad n p
-
-
-hasExt :: FilePath -> Bool
+hasExt :: RawFilePath -> Bool
 hasExt f
-  | head (takeFileName f) == '.' && takeExtension f == takeFileName f = False
+  | begginsWithDot f && takeExtension f == takeFileName f = False
   | hasExtension f = True
   | otherwise = False
 
-isHidden :: FilePath -> Bool
-isHidden f
-  | head (takeFileName f) == '.' && not (hasExt f) = True
+begginsWithDot :: RawFilePath -> Bool
+begginsWithDot f
+  | C.take 1 (takeFileName f) == C.pack "." = True
   | otherwise = False
 
-getDir :: FilePath -> FilePath -> FilePath
+isHidden :: RawFilePath -> Bool
+isHidden f
+  | begginsWithDot f && not (hasExt f) = True
+  | otherwise = False
+
+getDir :: RawFilePath -> RawFilePath -> RawFilePath
 getDir f d
   | takeDirectory f == d = d
-  | d == "." = takeDirectory f
+  | d == C.pack "." = takeDirectory f
   | otherwise = d
 
-pad :: Show p => p -> Int -> [Char]
-pad n p = replicate (p - length sn) '0' <> sn
+pad :: Show p => p -> Int -> C.ByteString
+pad n p =
+  C.replicate (p - C.length sn) zn <> sn
   where
-    sn = show n
+    sn = C.pack (show n)
+    zn = '0'
 
--- snippet by chatGPT
-replace :: String -> String -> String -> String
+replace :: C.ByteString -> C.ByteString -> C.ByteString -> C.ByteString
 replace old new input =
-  case input =~ old :: (String, String, String) of
-    (before', _, after') -> before' ++ new ++ after'
-
+  case input =~ old :: (C.ByteString, C.ByteString, C.ByteString) of
+    (bef, _, aft) -> p $ b ++ n ++ a
+      where
+        p = C.pack
+        u = C.unpack
+        b = u bef
+        n = u new
+        a = u aft
