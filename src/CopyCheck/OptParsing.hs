@@ -74,7 +74,7 @@ optsParser
       <> help "Number of zeros to add to the incremental number after TEXT"
       <> completeWith (showNumList 1 (6 :: Int))
 
-showNumList :: (Show a, Enum a) => a -> a -> [String]
+showNumList :: Int -> Int -> [String]
 showNumList x y = map show [x..y]
 
 versionOptParse :: Parser (a -> a)

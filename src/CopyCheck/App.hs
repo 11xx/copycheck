@@ -24,7 +24,8 @@ import Text.Regex.TDFA ( (=~) )
 import qualified Data.ByteString.UTF8 as BB (fromString)
 import qualified Data.ByteString.Char8 as C
 
-copyCheck :: (Num p, Show p) => p -> IO ()
+
+copyCheck :: Int -> IO ()
 copyCheck n = do
   opts <- customExecParser p optsParserInfo
   r <- copyCheckRename opts n
@@ -32,7 +33,7 @@ copyCheck n = do
     where
       p = prefs showHelpOnEmpty
 
-copyCheckRename :: (Num p, Show p) => Opts -> p -> IO C.ByteString
+copyCheckRename :: Opts -> Int -> IO C.ByteString
 copyCheckRename opts@(Opts fo t d p _) n = do
   let f = takeFileName fo
   let he = hasExt f
@@ -68,7 +69,7 @@ copyCheckRename opts@(Opts fo t d p _) n = do
 
   checkExist
 
-copyText :: Show p => C.ByteString -> Int -> p -> C.ByteString
+copyText :: C.ByteString -> Int -> Int -> C.ByteString
 copyText t p n = t <> pad n p
 
 hasExt :: RawFilePath -> Bool
@@ -93,7 +94,7 @@ getDir f d
   | d == C.pack "." = takeDirectory f
   | otherwise = d
 
-pad :: Show p => p -> Int -> C.ByteString
+pad :: Int -> Int -> C.ByteString
 pad n p =
   C.replicate (p - C.length sn) zn <> sn
   where
