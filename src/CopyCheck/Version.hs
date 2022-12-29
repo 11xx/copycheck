@@ -8,4 +8,4 @@ progName :: [Char]
 progName = "copycheck"
 
 versionStr :: [Char]
-versionStr = progName ++ ", " ++ (showVersion version)
+versionStr = progName ++ " version " ++ (showVersion version)

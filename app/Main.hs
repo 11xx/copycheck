@@ -1,6 +1,6 @@
 module Main (main) where
 
-import CopyCheck.App (copyCheck)
+import CopyCheck.ByteString.App (copyCheck)
 
 initialCounter :: Int
 initialCounter = 1

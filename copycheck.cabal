@@ -14,7 +14,7 @@ name:               copycheck
 -- PVP summary:      +-+------- breaking API changes
 --                   | | +----- non-breaking API additions
 --                   | | | +--- code changes with no API change
-version:            0.3.3.2
+version:            0.3.3.3-bytestring
 
 -- A short (one-line) description of the package.
 synopsis:
@@ -53,8 +53,8 @@ extra-source-files:
 library
     -- Modules exported by the library.
     exposed-modules:
-        CopyCheck.App
-        CopyCheck.OptParsing
+        CopyCheck.ByteString.App
+        CopyCheck.ByteString.OptParsing
         CopyCheck.Version
         Paths_copycheck
 
