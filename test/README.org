@@ -1,0 +1,33 @@
+# [2022-12-29 Thu 06:06:16 -03]
+For testing the existance of files in the filesystem they have to be
+phisically present.  Here's a little shell script for generating the
+files where the test suite expects it (at =test/.test-cases=):
+#+begin_src shell
+#!/usr/bin/env sh
+
+dir=.test-cases
+mkdir -p "$dir"
+
+cd "$dir" || printf 'Couldnt cd to %s, exiting...\n\n' "$dir" && exit 1
+
+# remove echo for real creation
+cat <<EOF | while read -r a; do touch "$a"; done
+.hiddot.ext
+.hid_nodot
+filedot.ext
+file_nodot
+.hiddot_COPY_01.ext
+.hid_nodot_COPY_01
+filedot_COPY_01.ext
+file_nodot_COPY_01
+.hiddot_COPY_02.ext
+.hid_nodot_COPY_02
+filedot_COPY_02.ext
+file_nodot_COPY_02
+.hiddot_COPY_03.ext
+.hid_nodot_COPY_03
+filedot_COPY_03.ext
+file_nodot_COPY_03
+filename_specialçãõäüå.ext
+EOF
+#+end_src
