@@ -7,20 +7,17 @@ module CopyCheck.OptParsing
   , optsParserInfo
   ) where
 
-import qualified Data.ByteString.Char8 as C
-
 import Options.Applicative
 import CopyCheck.Version (versionStr)
 
 import Data.Kind (Type) -- for Opts data record `* -> *'
 
-import System.FilePath.Posix.ByteString
-    ( encodeFilePath, RawFilePath )
+import System.FilePath.Posix
 
 data Opts = Opts
-  { optFilename :: RawFilePath
-  , optCopyText :: C.ByteString
-  , optDir      :: RawFilePath
+  { optFilename :: FilePath
+  , optCopyText :: String
+  , optDir      :: FilePath
   , optPadNum   :: Int
   , optVersion  :: Type -> Type
   }
@@ -53,7 +50,7 @@ optsParser
       $ long "text"
       <> short 't'
       <> metavar "TEXT"
-      <> value (C.pack "_COPY_")
+      <> value "_COPY_"
       <> help "Text to append to conflicting filename"
 
     dirOptParser
@@ -61,7 +58,7 @@ optsParser
       $ long "dir"
       <> short 'd'
       <> metavar "PATH"
-      <> value (encodeFilePath ".")
+      <> value "."
       <> help "Directory to check if FILENAME exists"
       <> action "directory"
 
