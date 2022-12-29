@@ -33,35 +33,38 @@ unique name.
 # [ ] replace for specified copy text with =-r <copytext-regexp>=
 # [2022-12-22 Thu 22:34:01 -03]
 
-** Requirements
-   :PROPERTIES:
-   :CUSTOM_ID: requirements
-   :END:
-This program requires the following Haskell libraries:
-- =Data.ByteString.UTF8=
-- =Data.ByteString.Char8=
-- =Options.Applicative=
-- =RawFilePath=
-- =System.FilePath.Posix.ByteString=
-- =Text.Regex.TDFA=
+# ** Requirements
+#    :PROPERTIES:
+#    :CUSTOM_ID: requirements
+#    :END:
+# This program requires the following Haskell libraries:
+# - =Data.ByteString.UTF8=
+# - =Data.ByteString.Char8=
+# - =Options.Applicative=
+# - =RawFilePath=
+# - =System.FilePath.Posix.ByteString=
+# - =Text.Regex.TDFA=
+
+# Commented because it doesn't matter does it :p
 
 ** Installation
    :PROPERTIES:
    :CUSTOM_ID: installation
    :END:
 To install =copycheck=, clone this repository and build the executable
-using the Haskell tool =stack=:
+using the Haskell's =cabal= build system:
 
 #+begin_example
   git clone https://codeberg.org/11xx/copycheck
   cd copycheck
-  stack install
+  cabal install
 #+end_example
 
-This will build the executable and copy it to Stack's default
-=~/.local/bin=, or the location specified by =local-bin-path:= in Stack's
-=config.yaml=. This directory can be added to =PATH= to make the =copycheck=
-command available globally.
+This will build the executable and link it to Cabal's default install
+directory, that can be set by the =CABAL_DIR= environment variable; or
+the location specified by =installdir:= in Cabal's config file. This
+directory can then be added to =PATH= to make the =copycheck= command
+available globally.
 
 ** Usage
    :PROPERTIES:

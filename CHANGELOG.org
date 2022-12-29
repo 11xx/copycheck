@@ -7,6 +7,12 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
+*** v0.3.3.2
+- Moved to Cabal-only build system. Cabal's default optimizations lead
+  to a 250% faster binary than the one produced by Stack's defaults.
+- Implemented a primitive test suite
+# [2022-12-29 Thu 05:29:14 -03]
+
 *** v0.3.3.1
 - Moved to Data.ByteString.Char8 & lastly encoded with Data.ByteString.UTF8
   Yes, for an application this small there was /no/ difference in performance.
