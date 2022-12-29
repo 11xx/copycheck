@@ -7,6 +7,10 @@ The format is based on [[https://keepachangelog.com/en/1.0.0/][Keep a Changelog]
 
 ** Unreleased
 
+*** v0.3.3.3
+- Reverted to default =String= from =ByteString= to simplify usage and
+  dependencies. For a program this small it makes no difference.
+# [2022-12-29 Thu 17:15:23 -03]
 *** v0.3.3.2
 - Moved to Cabal-only build system. Cabal's default optimizations lead
   to a 250% faster binary than the one produced by Stack's defaults.

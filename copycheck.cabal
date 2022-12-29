@@ -11,10 +11,10 @@ name:               copycheck
 -- See the Haskell package versioning policy (PVP) for standards
 -- guiding when and how versions should be incremented.
 -- https://pvp.haskell.org
--- PVP summary:      +-+------- breaking API changes
---                   | | +----- non-breaking API additions
---                   | | | +--- code changes with no API change
-version:            0.3.3.2
+-- PVP summary:     +-+------- breaking API changes
+--                  | | +----- non-breaking API additions
+--                  | | | +--- code changes with no API change
+version:            0.3.3.3
 
 -- A short (one-line) description of the package.
 synopsis:
@@ -67,12 +67,10 @@ library
     -- Other library packages from which modules are imported.
     build-depends:
         base ^>=4.16.4.0
-      , bytestring ==0.11.*
-      , filepath-bytestring ==1.4.2.*
+      , directory ==1.3.*
+      , filepath ==1.4.*
       , optparse-applicative >=0.17 && <1.17.1
-      , rawfilepath ==1.0.*
       , regex-tdfa ==1.3.*
-      , utf8-string >=1.0.2 && <1.1
 
     -- Directories containing source files.
     hs-source-dirs:   src
@@ -94,12 +92,10 @@ executable copycheck
     build-depends:
         base ^>=4.16.4.0
       , copycheck
-      , bytestring ==0.11.*
-      , filepath-bytestring ==1.4.2.*
+      , directory ==1.3.*
+      , filepath ==1.4.*
       , optparse-applicative >=0.17 && <1.17.1
-      , rawfilepath ==1.0.*
       , regex-tdfa ==1.3.*
-      , utf8-string >=1.0.2 && <1.1
 
     -- Directories containing source files.
     hs-source-dirs:   app
@@ -124,5 +120,4 @@ test-suite copycheck-test
     build-depends:
         base ^>=4.16.4.0
       , copycheck
-      , bytestring ^>=0.11.3.1
       , hspec ^>=2.10.8

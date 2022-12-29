@@ -31,21 +31,6 @@ unique name.
 
 # * TODOs                                                                :todo:
 # [ ] replace for specified copy text with =-r <copytext-regexp>=
-# [2022-12-22 Thu 22:34:01 -03]
-
-# ** Requirements
-#    :PROPERTIES:
-#    :CUSTOM_ID: requirements
-#    :END:
-# This program requires the following Haskell libraries:
-# - =Data.ByteString.UTF8=
-# - =Data.ByteString.Char8=
-# - =Options.Applicative=
-# - =RawFilePath=
-# - =System.FilePath.Posix.ByteString=
-# - =Text.Regex.TDFA=
-
-# Commented because it doesn't matter does it :p
 
 ** Installation
    :PROPERTIES:
