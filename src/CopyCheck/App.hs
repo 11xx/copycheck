@@ -30,7 +30,7 @@ copyCheck n = do
       p = prefs showHelpOnEmpty
 
 copyCheckRename :: Opts -> Int -> IO String
-copyCheckRename opts@(Opts fo t d p _) n = do
+copyCheckRename opts@(Opts fo t d p _ r) n = do
   let f = takeFileName fo
   let he = hasExt f
       ih = isHidden f
@@ -38,6 +38,10 @@ copyCheckRename opts@(Opts fo t d p _) n = do
       base = takeBaseName f
       file = takeFileName f
       ext = takeExtension f
+
+  let rmText (Just r) = r
+      rmText Nothing = defOld
+      defOld = t <> "[0-9]*"
 
   let renamed nn
         | he = heR
@@ -47,10 +51,10 @@ copyCheckRename opts@(Opts fo t d p _) n = do
           ct = copyText t p nn
           heR = replacedHeR
           ihR = replacedIhR
-          replacedHeR = replace old new base <> ct <> ext
-          replacedIhR = replace old new file <> ct
-          old = t <> "[0-9]*"
+          replacedHeR = replace rt new base <> ct <> ext
+          replacedIhR = replace rt new file <> ct
           new = []
+          rt = rmText r
 
   e <- doesFileExist $  dir </> f
   re <- doesFileExist $ dir </> renamed n

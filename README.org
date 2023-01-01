@@ -8,11 +8,11 @@
   :PROPERTIES:
   :CUSTOM_ID: copycheck-a-command-line-tool-for-renaming-files-with-copy-identifiers
   :END:
-=copycheck= is a command-line tool that allows the renaming a file to
-include a copy identifier if a file with the same name already exists in
-a specified directory. This can be useful to keep multiple copies of a
-file in the same directory, but need to ensure that each copy has a
-unique name.
+=copycheck= is a Linux command-line tool that allows the renaming a file
+to include a copy identifier if a file with the same name already
+exists in a specified directory. This can be useful to keep multiple
+copies of a file in the same directory, but need to ensure that each
+copy has a unique name.
 
 ** Notes
    :PROPERTIES:

@@ -4,3 +4,4 @@
 .bkp/
 *.bkp
 dist-newstyle/
+.*/

@@ -20,6 +20,7 @@ data Opts = Opts
   , optDir      :: FilePath
   , optPadNum   :: Int
   , optVersion  :: Type -> Type
+  , optRmText   :: Maybe String
   }
 
 optsParser :: Parser Opts
@@ -30,6 +31,7 @@ optsParser
   <*> dirOptParser
   <*> padNumOptParser
   <*> versionOptParse
+  <*> rmTextParse
 
   where
     fileOptParser
@@ -70,6 +72,14 @@ optsParser
       <> value 2
       <> help "Number of zeros to add to the incremental number after TEXT"
       <> completeWith (showNumList 1 (6 :: Int))
+
+    rmTextParse
+      = optional
+      $ strOption
+      $ long "rm-text"
+      <> short 'r'
+      <> metavar "REGEXP"
+      <> help "Remove REGEXP from the filename, e.g.: \"-r 'C[a-z]+_[0-9]+'\", for matching strings like `Cooopppyyy_00044433221' within a filename."
 
 showNumList :: Int -> Int -> [String]
 showNumList x y = map show [x..y]

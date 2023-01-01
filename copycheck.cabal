@@ -14,7 +14,7 @@ name:               copycheck
 -- PVP summary:     +-+------- breaking API changes
 --                  | | +----- non-breaking API additions
 --                  | | | +--- code changes with no API change
-version:            0.3.3.3
+version:            0.3.4.0
 
 -- A short (one-line) description of the package.
 synopsis:
@@ -99,6 +99,7 @@ executable copycheck
 
     -- Directories containing source files.
     hs-source-dirs:   app
+                      src
 
     -- Base language which the package is written in.
     default-language: Haskell2010
