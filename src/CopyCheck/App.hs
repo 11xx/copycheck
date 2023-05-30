@@ -74,24 +74,24 @@ copyText t p n = t <> pad n p
 
 hasExt :: FilePath -> Bool
 hasExt f
-  | begginsWithDot f && takeExtension f == takeFileName f = False
+  | beginsWithDot f && takeExtension f == takeFileName f = False
   | hasExtension f = True
   | otherwise = False
 
-begginsWithDot :: FilePath -> Bool
-begginsWithDot f
+beginsWithDot :: FilePath -> Bool
+beginsWithDot f
   | head (takeFileName f) == '.' = True
   | otherwise = False
 
 isHidden :: FilePath -> Bool
 isHidden f
-  | begginsWithDot f && not (hasExt f) = True
+  | beginsWithDot f && not (hasExt f) = True
   | otherwise = False
 
 getDir :: FilePath -> FilePath -> FilePath
 getDir f d
   | takeDirectory f == d = d
-  | d == "." = takeDirectory f
+  -- | d == "." = takeDirectory f
   | otherwise = d
 
 pad :: Int -> Int -> String
